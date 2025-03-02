@@ -1,8 +1,11 @@
 /* AllTodos.css */
 .todo-table {
-    width: 100%;
+    width: 80%;
     border-collapse: collapse;
     margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+   text-align: center;
   }
   
   .todo-table th, .todo-table td {
@@ -23,4 +26,34 @@
   .todo-table tr:hover {
     background-color: #ddd;
   }
+  .status-select {
+    padding: 6px 10px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: white;
+    cursor: pointer;
+    outline: none;
+}
+
+.status-select:hover {
+    border-color: #007bff;
+}
+
+
+.update-btn {
+    margin-left: 10px;
+    padding: 6px 12px;
+    font-size: 14px;
+    color: white;
+    background-color: #28a745;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.update-btn:hover {
+    background-color: #218838;
+}
   

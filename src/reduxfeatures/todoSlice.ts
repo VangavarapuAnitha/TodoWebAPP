@@ -12,6 +12,7 @@ export interface todo {
   task: string;
   assignedTo: string;
   taskState: number;
+  taskAddedOn:string;
 }
 interface todoState {
   todos: todo[];
@@ -37,10 +38,17 @@ export const todoSlice = createSlice({
         task: action.payload.task,
         assignedTo: action.payload.assignedTo,
         taskState: TaskStatus.notStarted,
+        taskAddedOn: new Date().toLocaleDateString()
       };
       state.todos.push(todo);
+    },
+ updateTaskStatus: (state,action:PayloadAction<{id:string,taskStatus:TaskStatus}>)=>{
+const todo= state.todos.find((t)=>t.id===action.payload.id)
+if(todo){
+  todo.taskState=action.payload.taskStatus
+}
     }
   },
 });
-export const {addTodo}= todoSlice.actions;
+export const {addTodo,updateTaskStatus}= todoSlice.actions;
 export default todoSlice.reducer

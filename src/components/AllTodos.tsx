@@ -1,11 +1,28 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../reduxfeatures/store";
-import { todo } from "../reduxfeatures/todoSlice";
+import { todo, updateTaskStatus } from "../reduxfeatures/todoSlice";
 import { TaskStatus } from "../reduxfeatures/todoSlice";
-import "../styles/AllTodos.css"
+import "../styles/AllTodos.css";
 const AllTodos: React.FC = () => {
   const todos = useSelector((state: RootState) => state.todos.todos);
+  const dispatch = useDispatch();
+  const [selectedStatuses, setSelectedStatuses] = useState<{
+    [key: string]: TaskStatus;
+  }>({});
+  const handleDropdownChange = (id: string, newStatus: TaskStatus) => {
+    setSelectedStatuses((prev) => ({
+      ...prev,
+      [id]: newStatus,
+    }));
+  };
+
+  const handleStatusUpdate = (id: string) => {
+    if (selectedStatuses[id] !== undefined) {
+      dispatch(updateTaskStatus({ id, taskStatus: selectedStatuses[id] }));
+    }
+  };
+
   const getTextStatus = (status: number): string => {
     switch (status) {
       case TaskStatus.notStarted:
@@ -23,11 +40,12 @@ const AllTodos: React.FC = () => {
   return (
     <table className="todo-table">
       <thead>
-          <tr>
-        <th>Task</th>
-        <th>Assigned To</th>
-        <th>status</th>
-        
+        <tr>
+          <th>Task</th>
+          <th>Assigned To</th>
+          <th>Current Status</th>
+          <th>Task Added On</th>
+          <th>Update TaskStatus</th>
         </tr>
       </thead>
       <tbody>
@@ -36,7 +54,29 @@ const AllTodos: React.FC = () => {
             <td>{t.task}</td>
             <td>{t.assignedTo}</td>
             <td>{getTextStatus(t.taskState)}</td>
-            <td><button>completed</button></td>
+            <td>{t.taskAddedOn}</td>
+            <td className="status-select">
+              {/* Dropdown for status selection */}
+              <select
+                value={selectedStatuses[t.id] ?? t.taskState}
+                onChange={(e) =>
+                  handleDropdownChange(
+                    t.id,
+                    Number(e.target.value) as TaskStatus
+                  )
+                }
+              >
+                {Object.values(TaskStatus)
+                  .filter((value) => Number.isInteger(value)) // Ensure only numeric values are included
+                  .map((status) => (
+                    <option key={status} value={status}>
+                      {TaskStatus[status as TaskStatus]}{" "}
+                      {/* Correct type assertion */}
+                    </option>
+                  ))}
+              </select>
+              <button onClick={() => handleStatusUpdate(t.id)} className="update-btn">Update</button>
+            </td>
           </tr>
         ))}
       </tbody>

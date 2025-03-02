@@ -8,7 +8,7 @@ const Navbar: React.FC = () => {
         <a href="/">Home</a>
         <a href="/allTodos">All Tasks</a>
         <a href="#">Completed</a>
-        <a href="#">Pending</a>
+        
     </div>
     </nav>
   );
